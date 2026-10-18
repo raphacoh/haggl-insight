@@ -1,6 +1,6 @@
 # haggl.ai — the pricing engine of everything (Insight edition)
 
-The approved 13-slide category plan (raphacoh/haggl-presentation), plus "What to do with the money":
+The approved category plan (raphacoh/haggl-presentation) without its Aleph decision slide, plus "What to do with the money":
 the Grok demo, programmatic offers, the acquisition candidates, and why now.
 
 - Use arrow keys or Index to navigate. Present for fullscreen, Notes for context and sources.

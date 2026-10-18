@@ -27,9 +27,13 @@ html = replace_once(html, '</style>\n</head>', css.strip() + '\n</style>\n</head
 html = replace_once(html, '</section>\n</main>', '</section>\n' + slides.strip() + '\n</main>')
 html = replace_once(html, '<meta name="theme-color" content="#111111">',
                     '<meta name="theme-color" content="#111111">\n<meta name="robots" content="noindex, nofollow">')
+# Aleph's decision slide (decide this week or close the company) stays out of the Insight edition.
+html, n = re.subn(r'<section class="slide dark decision" id="decision".*?</section>\n', '', html, flags=re.S)
+assert n == 1, n
 total = html.count('<section class="slide')
-html, n = re.subn(r'aria-label="(\d+) of 13:', lambda m: f'aria-label="{m.group(1)} of {total}:', html)
-assert n == 13, n
+labels = iter(range(1, total + 1))
+html, n = re.subn(r'aria-label="\d+ of \d+:', lambda m: f'aria-label="{next(labels)} of {total}:', html)
+assert n == total, n
 html = replace_once(html, 'aria-label="Haggl category plan"', 'aria-label="Haggl category plan and the use of funds"')
 out.write_text(html, encoding='utf-8')
 print(f'{out}: {total} slides, {len(html):,} bytes')
