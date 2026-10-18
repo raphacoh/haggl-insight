@@ -69,6 +69,9 @@ total = html.count('<section class="slide')
 labels = iter(range(1, total + 1))
 html, n = re.subn(r'aria-label="\d+ of \d+:', lambda m: f'aria-label="{next(labels)} of {total}:', html)
 assert n == total, n
+# Arrow keys must change slides even after a click leaves focus on a film; space still plays and pauses it.
+html = replace_once(html, "if(e.target.closest('input,textarea,select,video,[contenteditable]'))return;",
+                    "if(e.target.closest('input,textarea,select,[contenteditable]'))return;if(key===' '&&e.target.closest('video'))return;")
 html = replace_once(html, 'aria-label="Haggl category plan"', 'aria-label="Haggl category plan and the use of funds"')
 out.write_text(html, encoding='utf-8')
 print(f'{out}: {total} slides, {len(html):,} bytes')
