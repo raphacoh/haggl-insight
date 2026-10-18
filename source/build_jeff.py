@@ -47,7 +47,7 @@ sections.update({m.group(2): m.group(1) for m in re.finditer(SECTION, new, re.S)
 
 s = sections['vision-2022']
 s = replace_once(s, '<p>Slide 3 of the 2022 Moojo pitch.</p>',
-                 '<p>Before Moojo I led product at Waze and was a director of product at Google. I started Moojo in 2022 to give every shopper personalized cashback on every purchase, priced by what that customer is worth to the merchant. This is slide 3 of that first pitch.</p>')
+                 '<p>Before Moojo I led product at Waze and was a director of product at Google. I started Moojo in 2022 to give every shopper personalized cashback on every purchase, priced by what that customer is worth to the merchant. This is slide 3 of that first pitch. Moojo was haggl.ai before the pivot.</p>')
 sections['vision-2022'] = s
 
 s = sections['attention-2024']
@@ -58,13 +58,14 @@ sections['attention-2024'] = s
 s = sections['grok-demo']
 s = replace_once(s, 'poster="grok-poster.jpg" src="grok-demo.mp4"', 'poster="../grok-poster.jpg" src="../grok-demo.mp4"')
 s = replace_once(s, '<img src="grok-poster.jpg" alt="">', '<img src="../grok-poster.jpg" alt="">')
+s = replace_once(s, '<template class="notes"><p>Friday, October 16:', '<template class="notes"><p>This is the network working today: on the second trip, travel brands bid on my haggl ID before my agent sent anything.</p><p>Friday, October 16:')
 s = replace_once(s, '<p>a Lisbon hotel, once the agent showed one booking email from my Gmail</p>',
                  '<p>a Lisbon hotel booked direct, less than the 15–25% hotels pay Booking</p>')
 sections['grok-demo'] = s
 
 s = sections['performance']
 s = replace_once(s, '<p class="arr-range" data-edit-key="performance-primary-range">24.9% → 65.0%</p>',
-                 '<p class="arr-range arr-explain" data-edit-key="performance-primary-range">The share of shopping agents that recommend your store for the same shopping task, from 24.9% without haggl.ai to 65.0% with it</p>')
+                 '<p class="arr-range arr-explain" data-edit-key="performance-primary-range">The share of shopping agents that recommend your brand for the same shopping task, from 24.9% without haggl.ai to 65.0% with it</p>')
 sections['performance'] = s
 
 s = sections['candidates']
@@ -75,11 +76,13 @@ s = replace_once(s, '<template class="notes"><p>Other coupon',
                  '<template class="notes"><p>Coupon sites fight over the same static codes and affiliate fees. We open the one we buy to agents only, and every code becomes a single-use offer priced for one shopper and paid from the merchant’s acquisition budget.</p><p>Other coupon')
 sections['candidates'] = s
 
-ORDER = ['mission', 'vision-2022', 'attention-2024', 'what-is-haggl', 'grok-demo', 'performance', 'price-not-content',
-         'install', 'consent', 'stripe', 'programmatic-offers', 'candidates', 'own-the-category']
+ORDER = ['mission', 'vision-2022', 'attention-2024', 'what-is-haggl', 'price-not-content', 'brand-demo', 'performance',
+         'install', 'consent', 'stripe', 'offers-network', 'grok-demo', 'candidates', 'own-the-category']
 main = re.search(r'(<main id="presentation"[^>]*>\n)(.*?)(\n</main>)', html, re.S)
 html = html[:main.start(2)] + '\n'.join(sections[k] for k in ORDER) + html[main.end(2):]
 
+# The 2022 slide's caption, blank in the Aleph deck's saved edits, says Moojo was haggl.ai before the pivot.
+html = replace_once(html, '"vision-2022-2": "\\n"', '"vision-2022-2": "Moojo was haggl.ai before the pivot"')
 # The flywheel slide isn't in this edition, so the deck script must not assume its elements exist.
 html = replace_once(html, "function syncLoop(){const which=", "function syncLoop(){if(!document.querySelector('#loop-explanation'))return;const which=")
 html = replace_once(html, "clone.querySelector('#loop-explanation').textContent=explanations.all;clone.querySelector('#loop-explanation').dataset.editKey='flywheel-explanation:all';",
