@@ -32,6 +32,10 @@ film = re.search(r'<div class="film-frame">(<video id="haggl-demo".*?</button>)<
 lockups = ''.join(pick(rf'<div class="agent-lockup" data-brand="{brand}"[^>]*>.*?</div>', sections['product'])
                   for brand in ['grok', 'claude', 'muse', 'dots', 'openclaw'])
 replies = pick(r'<div class="email-replies">(?:<button.*?</button>)+</div>', sections['partner-emails'])
+# Stripe's replies, re-cropped onto one canvas so the avatars stack exactly (source/replies/r0-r4.png).
+shots = iter(f'data:image/png;base64,{base64.b64encode((here / "replies" / f"r{i}.png").read_bytes()).decode()}' for i in range(5))
+replies, n = re.subn(r'data:image/png;base64,[A-Za-z0-9+/=]+', lambda m: next(shots), replies)
+assert n == 5, n
 icon = ('<svg viewBox="10 20 240 200" aria-hidden="true"><path fill="#FF4A1C" '
         'd="M90 20L10 100L90 180L125 145L80 100L125 55Z M170 60L250 140L170 220L135 185L180 140L135 95Z"/></svg>')
 RIVALS = [('profound', 'Profound'), ('peec', 'Peec AI'), ('athena', 'AthenaHQ'), ('scrunch', 'Scrunch'), ('limy', 'Limy')]
